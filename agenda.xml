@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Agenda>
+    <Persona>
+        <name>Jose</name>
+        <email>jose@h.com</email>
+        <telephone>123456789</telephone>
+    </Persona>
+    <Persona>
+        <name>Clara</name>
+        <email>cara@h.com</email>
+        <telephone>123456789</telephone>
+    </Persona>
+    <Persona>
+        <name>Adolfo</name>
+        <email>adolfo@h.com</email>
+        <telephone>987654321</telephone>
+    </Persona>
+    <Persona>
+        <name>Juanan</name>
+        <email>juanan@h.com</email>
+        <telephone>987654321</telephone>
+    </Persona>
+    <Persona>
+        <name>Rafa</name>
+        <email>rafa@h.com</email>
+        <telephone>789654123</telephone>
+    </Persona>
+    <Persona>
+        <name>angel</name>
+        <email>angel@h.com</email>
+        <telephone>123456789</telephone>
+    </Persona>
+    <Persona>
+        <name>Alguien</name>
+        <email>alguien@h.com</email>
+        <telephone>123456789</telephone>
+    </Persona>
+    <Persona>
+        <name>lshdf</name>
+        <email>jkol@h.com</email>
+        <telephone>123456789</telephone>
+    </Persona>
+</Agenda>
