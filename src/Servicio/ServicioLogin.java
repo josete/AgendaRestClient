@@ -10,11 +10,10 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Jersey REST client generated for REST resource:ValidarAgenda
- * [agenda/validar]<br>
+ * Jersey REST client generated for REST resource:LoginResource [login]<br>
  * USAGE:
  * <pre>
- *        ServicioValidarAgenda client = new ServicioValidarAgenda();
+ *        ServicioLogin client = new ServicioLogin();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -22,15 +21,15 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Portatil
  */
-public class ServicioValidarAgenda {
+public class ServicioLogin {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/AgendaRest/webresources";
 
-    public ServicioValidarAgenda() {
+    public ServicioLogin() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("agenda/validar");
+        webTarget = client.target(BASE_URI).path("login");
     }
 
     public String putXml(Object requestEntity) throws ClientErrorException {

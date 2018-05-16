@@ -10,11 +10,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * Jersey REST client generated for REST resource:ValidarAgenda
- * [agenda/validar]<br>
+ * Jersey REST client generated for REST resource:RegistroResource
+ * [registro]<br>
  * USAGE:
  * <pre>
- *        ServicioValidarAgenda client = new ServicioValidarAgenda();
+ *        ServicioRegistro client = new ServicioRegistro();
  *        Object response = client.XXX(...);
  *        // do whatever with response
  *        client.close();
@@ -22,19 +22,24 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Portatil
  */
-public class ServicioValidarAgenda {
+public class ServicioRegistro {
 
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/AgendaRest/webresources";
 
-    public ServicioValidarAgenda() {
+    public ServicioRegistro() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("agenda/validar");
+        webTarget = client.target(BASE_URI).path("registro");
     }
 
-    public String putXml(Object requestEntity) throws ClientErrorException {
-        return webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), String.class);
+    public String getXml() throws ClientErrorException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(String.class);
+    }
+
+    public void putXml(Object requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     public void close() {

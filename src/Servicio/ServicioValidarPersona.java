@@ -11,7 +11,7 @@ import javax.ws.rs.client.WebTarget;
 
 /**
  * Jersey REST client generated for REST resource:ValidarPersona
- * [validarPersona]<br>
+ * [persona/validar]<br>
  * USAGE:
  * <pre>
  *        ServicioValidarPersona client = new ServicioValidarPersona();
@@ -30,7 +30,7 @@ public class ServicioValidarPersona {
 
     public ServicioValidarPersona() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("validarPersona");
+        webTarget = client.target(BASE_URI).path("persona/validar");
     }
 
     public String putXml(Object requestEntity) throws ClientErrorException {
