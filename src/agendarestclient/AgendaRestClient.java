@@ -6,9 +6,11 @@
 package agendarestclient;
 
 import Objetos.AgendaObjeto;
+import Objetos.AgendaObjetoConId;
 import Objetos.ImportarExportar;
 import Objetos.ListaAgendas;
 import Objetos.PersonaObjeto;
+import Objetos.PersonaObjetoConId;
 import Objetos.Usuario;
 import Servicio.ServicioAgenda;
 import Servicio.ServicioLogin;
@@ -76,7 +78,8 @@ public class AgendaRestClient {
         System.out.println("4. Modificar persona");
         System.out.println("5. Borrar persona");
         System.out.println("6. Crear persona");
-        System.out.println("7. Salir");
+        System.out.println("7. Crear agenda");
+        System.out.println("8. Salir");
         int opcion = scanner.nextInt();
         comprobarConToken(opcion);
     }
@@ -131,11 +134,20 @@ public class AgendaRestClient {
                 crearContacto();
                 break;
             case 7:
+                crearAgenda();
+                break;
+            case 8:
                 tokenFile.delete();
                 System.exit(0);
         }
     }
 
+    public static void crearAgenda(){
+        agendaSesrvice.postXml(token);
+        System.out.println("Agenda creada");
+        crearMenu();
+    }
+    
     public static void entrar() {
         System.out.println("Introduce tu email: ");
         String email = scanner.next();
@@ -161,7 +173,11 @@ public class AgendaRestClient {
         crearMenuSinToken();
     }
 
-    public static void modificarPersona(){
+    public static void modificarPersona() {
+        AgendaObjetoConId aid = personaService.getInfo(AgendaObjetoConId.class, String.valueOf(numeroAgenda), token);
+        for(PersonaObjetoConId pid : aid.getPersonas()){
+            System.out.println(pid.getId()+". "+pid.getNombre());
+        }
         System.out.println("Introduce el id de la persona:");
         int id = scanner.nextInt();
         System.out.println("Nombre: ");
@@ -179,14 +195,16 @@ public class AgendaRestClient {
             email = scanner.next();
         }
         PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
-        personaService.actualizar(p, String.valueOf(id),token);
+        personaService.actualizar(p, String.valueOf(id), token);
+        crearMenu();
     }
-    
-    public static void borrarPersona(){
+
+    public static void borrarPersona() {
         System.out.println("Introduce el id de la persona:");
         int id = scanner.nextInt();
         personaService.borrar(String.valueOf(id), token);
     }
+
     public static void verAgendas() {
         ListaAgendas a = agendaSesrvice.getXml(ListaAgendas.class, token);
         int i = 1;
@@ -196,8 +214,8 @@ public class AgendaRestClient {
         }
         System.out.println("Selecciona una agenda: ");
         int opcion = scanner.nextInt();
-        numeroAgenda = opcion;
-        System.out.println("Seleccionada la agenda " + numeroAgenda);
+        numeroAgenda = Integer.valueOf(a.getAgendas().get(opcion - 1).split(" ")[1]);
+        System.out.println("Seleccionada la agenda con id " + numeroAgenda);
         crearMenu();
     }
 
@@ -245,7 +263,7 @@ public class AgendaRestClient {
             email = scanner.next();
         }
         PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
-        personaService.putXml(p, String.valueOf(numeroAgenda),token);
+        personaService.putXml(p, String.valueOf(numeroAgenda), token);
         System.out.println("Persona insertada");
         crearMenu();
     }

@@ -33,15 +33,21 @@ public class ServicioPersona {
         webTarget = client.target(BASE_URI).path("persona");
     }
 
-    public void borrar(String idPersona,String token) throws ClientErrorException {
+    public void borrar(String idPersona, String token) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{idPersona})).request().header(HttpHeaders.AUTHORIZATION, token).delete();
+    }
+
+    public <T> T getInfo(Class<T> responseType, String idAgenda, String token) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}/info", new Object[]{idAgenda}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).get(responseType);
     }
 
     public void actualizar(Object requestEntity, String idPersona, String token) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{idPersona})).request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    public <T> T getXml(Class<T> responseType, String idAgenda, String nombre,String token) throws ClientErrorException {
+    public <T> T getXml(Class<T> responseType, String idAgenda, String nombre, String token) throws ClientErrorException {
         WebTarget resource = webTarget;
         if (nombre != null) {
             resource = resource.queryParam("nombre", nombre);
@@ -57,5 +63,5 @@ public class ServicioPersona {
     public void close() {
         client.close();
     }
-    
+
 }

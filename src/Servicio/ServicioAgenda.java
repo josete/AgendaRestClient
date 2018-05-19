@@ -38,8 +38,8 @@ public class ServicioAgenda {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).header(HttpHeaders.AUTHORIZATION, token).get(responseType);
     }
 
-    public void postXml() throws ClientErrorException {
-        webTarget.request().post(null);
+    public void postXml(String token) throws ClientErrorException {
+        webTarget.request().header(HttpHeaders.AUTHORIZATION, token).post(null);
     }
 
     public <T> T getAgenda(Class<T> responseType, String id, String token) throws ClientErrorException {
