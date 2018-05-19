@@ -142,12 +142,12 @@ public class AgendaRestClient {
         }
     }
 
-    public static void crearAgenda(){
+    public static void crearAgenda() {
         agendaSesrvice.postXml(token);
         System.out.println("Agenda creada");
         crearMenu();
     }
-    
+
     public static void entrar() {
         System.out.println("Introduce tu email: ");
         String email = scanner.next();
@@ -174,48 +174,71 @@ public class AgendaRestClient {
     }
 
     public static void modificarPersona() {
-        AgendaObjetoConId aid = personaService.getInfo(AgendaObjetoConId.class, String.valueOf(numeroAgenda), token);
-        for(PersonaObjetoConId pid : aid.getPersonas()){
-            System.out.println(pid.getId()+". "+pid.getNombre());
+        if (numeroAgenda != 0) {
+            AgendaObjetoConId aid = personaService.getInfo(AgendaObjetoConId.class, String.valueOf(numeroAgenda), token);
+            for (PersonaObjetoConId pid : aid.getPersonas()) {
+                System.out.println(pid.getId() + ". " + pid.getNombre());
+            }
+            System.out.println("Introduce el id de la persona:");
+            int id = scanner.nextInt();
+            System.out.println("Nombre: ");
+            String nombre = scanner.next();
+            System.out.println("Telefono: ");
+            String telefono = scanner.next();
+            while (!comprobarNumero(telefono)) {
+                System.out.println("El numero de telefono no es valido, vuelve a introducirlo: ");
+                telefono = scanner.next();
+            }
+            System.out.println("email: ");
+            String email = scanner.next();
+            if (!comprobarEmail(email)) {
+                System.out.println("El email introducido no es valido, vuelve a introducirlo: ");
+                email = scanner.next();
+            }
+            PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
+            personaService.actualizar(p, String.valueOf(id), token);
+            crearMenu();
+        } else {
+            System.out.println("No has seleccionado ninguna agenda");
+            crearMenu();
         }
-        System.out.println("Introduce el id de la persona:");
-        int id = scanner.nextInt();
-        System.out.println("Nombre: ");
-        String nombre = scanner.next();
-        System.out.println("Telefono: ");
-        String telefono = scanner.next();
-        while (!comprobarNumero(telefono)) {
-            System.out.println("El numero de telefono no es valido, vuelve a introducirlo: ");
-            telefono = scanner.next();
-        }
-        System.out.println("email: ");
-        String email = scanner.next();
-        if (!comprobarEmail(email)) {
-            System.out.println("El email introducido no es valido, vuelve a introducirlo: ");
-            email = scanner.next();
-        }
-        PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
-        personaService.actualizar(p, String.valueOf(id), token);
-        crearMenu();
     }
 
     public static void borrarPersona() {
-        System.out.println("Introduce el id de la persona:");
-        int id = scanner.nextInt();
-        personaService.borrar(String.valueOf(id), token);
+        if (numeroAgenda != 0) {
+            AgendaObjetoConId aid = personaService.getInfo(AgendaObjetoConId.class, String.valueOf(numeroAgenda), token);
+            for (PersonaObjetoConId pid : aid.getPersonas()) {
+                System.out.println(pid.getId() + ". " + pid.getNombre());
+            }
+            System.out.println("Introduce el id de la persona:");
+            int id = scanner.nextInt();
+            personaService.borrar(String.valueOf(id), token);
+            crearMenu();
+        } else {
+            System.out.println("No has seleccionado ninguna agenda");
+            crearMenu();
+        }
     }
 
     public static void verAgendas() {
         ListaAgendas a = agendaSesrvice.getXml(ListaAgendas.class, token);
         int i = 1;
-        for (String ag : a.getAgendas()) {
-            System.out.println(i + ". " + ag);
-            i++;
+        if (a.getAgendas() != null) {
+            for (String ag : a.getAgendas()) {
+                System.out.println(i + ". " + ag);
+                i++;
+            }
+            System.out.println("Selecciona una agenda: ");
+            int opcion = scanner.nextInt();
+            numeroAgenda = Integer.valueOf(a.getAgendas().get(opcion - 1).split(" ")[1]);
+            System.out.println("Seleccionada la agenda con id " + numeroAgenda);
+        } else {
+            agendaSesrvice.postXml(token);
+            System.out.println("Se ha creado una agenda");
+            a = agendaSesrvice.getXml(ListaAgendas.class, token);
+            numeroAgenda = Integer.valueOf(a.getAgendas().get(0).split(" ")[1]);
+            System.out.println("Seleccionada la agenda con id " + numeroAgenda);
         }
-        System.out.println("Selecciona una agenda: ");
-        int opcion = scanner.nextInt();
-        numeroAgenda = Integer.valueOf(a.getAgendas().get(opcion - 1).split(" ")[1]);
-        System.out.println("Seleccionada la agenda con id " + numeroAgenda);
         crearMenu();
     }
 
@@ -236,36 +259,46 @@ public class AgendaRestClient {
     }
 
     public static void verPersona() {
-        System.out.println("Introduce el nombre: ");
-        String nombre = scanner.next();
-        AgendaObjeto a = personaService.getXml(AgendaObjeto.class, String.valueOf(numeroAgenda), nombre, token);
-        for (PersonaObjeto p : a.getPersonas()) {
-            System.out.println("Nombre: " + p.getNombre());
-            System.out.println("Telefono: " + p.getTelefono());
-            System.out.println("Email: " + p.getEmail());
+        if (numeroAgenda != 0) {
+            System.out.println("Introduce el nombre: ");
+            String nombre = scanner.next();
+            AgendaObjeto a = personaService.getXml(AgendaObjeto.class, String.valueOf(numeroAgenda), nombre, token);
+            for (PersonaObjeto p : a.getPersonas()) {
+                System.out.println("Nombre: " + p.getNombre());
+                System.out.println("Telefono: " + p.getTelefono());
+                System.out.println("Email: " + p.getEmail());
+            }
+            crearMenu();
+        } else {
+            System.out.println("No has seleccionado una agenda");
+            crearMenu();
         }
-        crearMenu();
     }
 
     public static void crearContacto() {
-        System.out.println("Nombre: ");
-        String nombre = scanner.next();
-        System.out.println("Telefono: ");
-        String telefono = scanner.next();
-        while (!comprobarNumero(telefono)) {
-            System.out.println("El numero de telefono no es valido, vuelve a introducirlo: ");
-            telefono = scanner.next();
+        if (numeroAgenda != 0) {
+            System.out.println("Nombre: ");
+            String nombre = scanner.next();
+            System.out.println("Telefono: ");
+            String telefono = scanner.next();
+            while (!comprobarNumero(telefono)) {
+                System.out.println("El numero de telefono no es valido, vuelve a introducirlo: ");
+                telefono = scanner.next();
+            }
+            System.out.println("email: ");
+            String email = scanner.next();
+            if (!comprobarEmail(email)) {
+                System.out.println("El email introducido no es valido, vuelve a introducirlo: ");
+                email = scanner.next();
+            }
+            PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
+            personaService.putXml(p, String.valueOf(numeroAgenda), token);
+            System.out.println("Persona insertada");
+            crearMenu();
+        } else {
+            System.out.println("No has seleccionado una agenda");
+            crearMenu();
         }
-        System.out.println("email: ");
-        String email = scanner.next();
-        if (!comprobarEmail(email)) {
-            System.out.println("El email introducido no es valido, vuelve a introducirlo: ");
-            email = scanner.next();
-        }
-        PersonaObjeto p = new PersonaObjeto(nombre, telefono, email);
-        personaService.putXml(p, String.valueOf(numeroAgenda), token);
-        System.out.println("Persona insertada");
-        crearMenu();
     }
 
     public static void validarAgenda() {
